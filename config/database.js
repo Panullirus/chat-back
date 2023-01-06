@@ -6,7 +6,7 @@ dotenv.config();
 export const DatabaseConfig = new Sequelize({
     username: "root",
     password: null,
-    database: "desarrollodesoftware",
+    database: "Chat",
     host: "127.0.0.1",
     dialect: "mysql",
     timezone: '-05:00',

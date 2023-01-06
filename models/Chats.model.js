@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { DatabaseConfig } from "../config/database.js";
 
-export class UserModel extends Model {}
+export class ChatsModel extends Model {}
 
 UserModel.init({
     id: {
@@ -11,28 +11,20 @@ UserModel.init({
         comment: 'null',
         autoIncrement: true   
     },
-    name: {
+    chatForm: {
         type: DataTypes.STRING(25),
         allowNull: true,
     },
-    image_uri: {
-        type: DataTypes.STRING(15),
-        allowNull: true,
-    },
-    chatsContainer: {
-        type: DataTypes.INTEGER,
+    chatscontainerID: {
+        type: DataTypes.STRING(25),
         allowNull: true,
     },
     userID: {
-        type: DataTypes.BOOLEAN,
-        AllowNull: true,
-    },
-    user_to: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(25),
         allowNull: true,
     }
 }, {
     sequelize: DatabaseConfig,
-    tableName: 'User',
+    tableName: 'Chats',
     timestamps: false,
 });
