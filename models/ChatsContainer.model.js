@@ -3,7 +3,9 @@ import { DatabaseConfig } from "../config/database.js";
 
 export class ChatsContainerModel extends Model {}
 
-UserModel.init({
+
+
+ChatsContainerModel.init({
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -11,12 +13,12 @@ UserModel.init({
         comment: 'null',
         autoIncrement: true   
     },
-    chatsContainer: {
-        type: DataTypes.STRING(25),
+    MessageRoomsID: {
+        type: DataTypes.INTEGER,
         allowNull: true,
     }
 }, {
     sequelize: DatabaseConfig,
-    tableName: 'ChatContainer',
+    tableName: 'ChatsContainer',
     timestamps: false,
 });

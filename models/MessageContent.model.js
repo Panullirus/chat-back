@@ -1,33 +1,32 @@
-import sequelize from "sequelize";
 import { DataTypes, Model } from "sequelize";
 import { DatabaseConfig } from "../config/database.js";
 
-export class UserModel extends Model {}
+export class MessageContent extends Model {}
 
-UserModel.init({
+MessageContent.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    nombre: {
+    contenido: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    fecha_envio: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    correo: {
-        type: DataTypes.STRING,
+    id_usuario_envia: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    clave: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    last_connection:{
-        type: DataTypes.STRING,
+    conversaciones_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
     }
 }, {
     sequelize: DatabaseConfig,
-    tableName: 'usuarios',
+    tableName: 'mensajes',
     timestamps: false,
 });

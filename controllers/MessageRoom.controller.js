@@ -1,9 +1,16 @@
 import {request, response} from 'express';
-import { competenciesQueries } from '../queries/competencies.queries.js';
-import { Payload } from '../helpers/payload.js';
+import { messageRoomQueries } from '../queries/MessagRoom.queries.js'
+import {Payload} from '../helpers/payload.js';
 
-class CompetenciesController {
+class MessageRoomControllers {
     static payload = new Payload();
+
+    async sayHello (request, response) {
+        return response.status(200).json({
+            ok: true,
+            message: 'Hello'
+        });
+    }
 
     async processData(request, response){
         const body = request.body;
@@ -13,7 +20,7 @@ class CompetenciesController {
 
     async create(req, response){
         const body = req.body;
-        const query = await competenciesQueries.store(body);
+        const query = await messageRoomQueries.store(body);
         if(query.ok){
             return response.status(200).json({ok: true, message: query.data});
         }else {
@@ -24,7 +31,7 @@ class CompetenciesController {
     async find(req, res){
         const body = req.body;
         const condition = body.condition;
-        const query = await competenciesQueries.find(condition);
+        const query = await messageRoomQueries.find(condition);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -33,22 +40,20 @@ class CompetenciesController {
     }
 
     async findOne(req, res){
-        try {
-            const body = req.body;
-            const query = await competenciesQueries.findOne(body);
-            if(query.ok){
-                return res.status(200).json({ok: true, message: query.data});
-            }else {
-                return res.status(200).json({ok: false, message: 'Error'});
-            }
-        } catch (error) {
-            console.log(error)
+        const body = req.body;
+
+        console.log(body)
+        const query = await messageRoomQueries.findOne(body);
+        if(query){
+            return res.status(200).json({ok: true, message: query.data});
+        }else {
+            return res.status(200).json({ok: false, message: 'Error'});
         }
     }
 
     async update(req, res){
         const body = req.body;
-        const query = await competenciesQueries.update(body);
+        const query = await messageRoomQueries.update(body);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -58,7 +63,7 @@ class CompetenciesController {
 
     async delete(req, res){
         const body = req.body;
-        const query = await competenciesQueries.delete(body);
+        const query = await messageRoomQueries.delete(body);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -67,4 +72,4 @@ class CompetenciesController {
     }
 }
 
-export const competenciesController = new CompetenciesController();
+export const messageRoom = new MessageRoomControllers();

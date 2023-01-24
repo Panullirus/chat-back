@@ -1,8 +1,8 @@
 import {request, response} from 'express';
-import {schoolarQueries} from '../queries/schoolar.queries.js';
+import { chatsContainerQueries } from '../queries/chatsContainer.queries.js'
 import {Payload} from '../helpers/payload.js';
 
-class SchoolarController {
+class ChatsContainerControllers {
     static payload = new Payload();
 
     async sayHello (request, response) {
@@ -19,9 +19,8 @@ class SchoolarController {
     }
 
     async create(req, response){
-        console.log(req.body)
         const body = req.body;
-        const query = await schoolarQueries.store(body);
+        const query = await chatsContainerQueries.store(body);
         if(query.ok){
             return response.status(200).json({ok: true, message: query.data});
         }else {
@@ -32,7 +31,7 @@ class SchoolarController {
     async find(req, res){
         const body = req.body;
         const condition = body.condition;
-        const query = await schoolarQueries.find(condition);
+        const query = await chatsContainerQueries.find(condition);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -42,7 +41,7 @@ class SchoolarController {
 
     async findOne(req, res){
         const body = req.body;
-        const query = await schoolarQueries.findOne(body);
+        const query = await chatsContainerQueries.findOne(body);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -52,7 +51,7 @@ class SchoolarController {
 
     async update(req, res){
         const body = req.body;
-        const query = await schoolarQueries.update(body);
+        const query = await chatsContainerQueries.update(body);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -62,7 +61,7 @@ class SchoolarController {
 
     async delete(req, res){
         const body = req.body;
-        const query = await schoolarQueries.delete(body);
+        const query = await chatsContainerQueries.delete(body);
         if(query.ok){
             return res.status(200).json({ok: true, message: query.data});
         }else {
@@ -71,4 +70,4 @@ class SchoolarController {
     }
 }
 
-export const schoolarController = new SchoolarController();
+export const chatsContainerController = new ChatsContainerControllers();

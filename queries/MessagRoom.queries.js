@@ -1,9 +1,11 @@
-import { MessageContent } from '../models/MessageContent.model.js'
+import sequelize from 'sequelize';
+import { Op } from 'sequelize';
+import { MessageRoom } from '../models/MessageRoom.model.js'
 
-class MessageContentQueries {
+class MessageRoomQueries {
     async store(profile) {
         try {
-            const query = await MessageContent.create(profile);
+            const query = await MessageRoom.create(profile);
             if (query) {
                 return { ok: true, data: query }
             }
@@ -14,12 +16,8 @@ class MessageContentQueries {
     }
 
     async find(condition = {}) {
-        console.log("Conversacionid => ", condition)
         try {
-            const query = await MessageContent.findAll({ where: { conversaciones_id: condition.conversaciones_id } });
-
-            console.log("error por aca => ", query)
-
+            const query = await MessageRoom.findAll({ where: condition });
             if (query) {
                 return { ok: true, data: query }
             }
@@ -30,11 +28,19 @@ class MessageContentQueries {
     }
 
     async findOne(condition = {}) {
+
+        console.log("condicion => ", condition)
         try {
-            const query = await MessageContent.findOne({ where: { id_usuario_2: condition.id_usuario_2 } });
-            if (query) {
-                return { ok: true, data: query }
-            }
+            const query = await MessageRoom.findOne({
+                where: {
+                    [Op.or]: [
+                        { id_usuario_1: condition.id_usuario_2, id_usuario_2: condition.id_usuario_1 },
+                        { id_usuario_1: condition.id_usuario_1, id_usuario_2: condition.id_usuario_2 }
+                    ]
+                },
+            })
+            return {ok: true, data: query}
+
         } catch (e) {
             console.log('error al ejecutar query', e);
             return { ok: false, data: null }
@@ -43,7 +49,7 @@ class MessageContentQueries {
 
     async update(condition = {}, data = {}) {
         try {
-            const query = await MessageContent.update(condition, { where: { id: condition.id } });
+            const query = await MessageRoom.update(condition, { where: { id: condition.id } });
             if (query) {
                 return { ok: true, data: query }
             }
@@ -55,7 +61,7 @@ class MessageContentQueries {
 
     async delete(condition = {}) {
         try {
-            const query = await MessageContent.destroy({ where: { id: condition.id } });
+            const query = await MessageRoom.destroy({ where: { id: condition.id } });
             if (query) {
                 return { ok: true, data: query }
             }
@@ -66,4 +72,4 @@ class MessageContentQueries {
     }
 }
 
-export const messageContentQueries = new MessageContentQueries();
+export const messageRoomQueries = new MessageRoomQueries();

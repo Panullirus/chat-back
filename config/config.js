@@ -6,16 +6,17 @@ import dotenv from 'dotenv';
 import { Routes } from '../routes/routes.js';
 import { Telegraf } from 'telegraf';
 import { Database } from '../config/database.js';
-import { messageControllers } from "../controllers/message.controllers.js";
 
 dotenv.config();
 
 class App {
     app = express.application
     http = null;
+    io = null;
     bot = null;
     routes = new Routes();
     db = new Database();
+    io = new Server(this.http)
 
     constructor(){
         this.initializeApp()
@@ -29,6 +30,7 @@ class App {
         this.routes.initRoutes(this.app);
         this.bot = new Telegraf(process.env.BOT_TOKEN);
         await this.initBotListening(this.bot);
+        this.initSocket();
     }
 
     config(){
@@ -48,12 +50,6 @@ class App {
 
     async initBotListening(bot){
         bot.on('text', async (ctx) => {
-
-            console.log("Contenido del mensaje => ", ctx.message);
-
-            const storeMessage = await messageControllers.create(ctx.message);
-            console.log("Desde initBotListening => ", storeMessage);
-
             // console.log("Error en store mensaje => ", storeMessage);
         });
 
@@ -66,6 +62,31 @@ class App {
         });
 
     }
+
+    async initSocket(){
+        this.io.on('connection', (socket) => {
+
+            console.log("Nuevo usuario conectado", socket.id)
+
+            socket.on('message_data', (data) => {
+                this.io.emit('message_data', data);
+                console.log(data)
+            })
+
+            socket.on('new_user_connected', (data) => {
+                this.io.emit('Nuevo usuario conectado', data)
+            })
+
+            socket.on('disconnect', () => {
+                console.log("Usuario desconectado")
+            })
+        })
+
+        this.io.listen(3001);
+
+        console.log('socket io is listening on port ', 3001)
+    }
 }
 
 export default new App();
+export {App}

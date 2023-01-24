@@ -1,9 +1,9 @@
 import { request, response } from "express";
-import { messageControllers } from "./message.controllers.js";
 import { UserQueries } from '../queries/user.queries.js';
 import { Payload } from '../helpers/payload.js';
 import { Telegraf } from 'telegraf';
 import bcrypt from 'bcrypt';
+import app from '../config/config.js'
 const saltRounds = 10;
 
 class UserController {
@@ -25,14 +25,15 @@ class UserController {
 
     async create(req, response){
         const body = req.body;
-        bcrypt.hash(body.password, saltRounds, async function(err, hash) {
-            console.log(hash)
+        bcrypt.hash(body.clave, saltRounds, async function(err, hash) {
 
             const input = {
-                username: body.username,
-                password: hash,
+                correo: body.correo,
+                clave: hash,
+                nombre: body.nombre,
             }
 
+            console.log(input)
             const query = await UserQueries.store(input);
         
             if(query.ok){
@@ -43,10 +44,33 @@ class UserController {
         });
     }
 
+    async findAllUsers(req, res){
+        const body = req.body;
+        const query = await UserQueries.findAllUsers(body);
+        if(query){
+            return res.status(200).json({ok: true, message: query.data})
+        }else{
+            return res.status(200).json({ok: false, message: 'Error'})
+        }
+    }
+
+    async update(req, res){
+        const body = req.body
+
+        const query = await UserQueries.putUser(body);
+        console.log("Datos par act => ", body)
+        if(query.ok){
+            return res.status(200).json({ok: true, data: query.data})
+        }else{
+            return res.status(200).json({ok: false, message: 'Error'});
+        }
+    }
+
     async find(req, res){
         const body = req.body;
         const query = await UserQueries.find(body);
         if(query.ok){
+            app.io.emit("new_user_connected", query.data)
             return res.status(200).json({ok: true, message: query.data});
         }else {
             return res.status(200).json({ok: false, message: 'Error'});
@@ -56,20 +80,23 @@ class UserController {
     async login(req, res){
         const body = req.body;
 
+        console.log("body => ", body)
+
         const input = {
-            username: body.username,
-            password: body.password,
+            correo: body.correo,
+            clave: body.clave,
         }
 
         const query = await UserQueries.find(input);
-
+            
         try {
-            const match = await bcrypt.compare(input.password, query.data.dataValues.password);
-            console.log(match)
+            const match = await bcrypt.compare(input.clave, query.data.dataValues.clave);
 
+            // console.log("match => ", input.password, query.data.dataValues.password)
             if(match){
                 try{
                     const token = UserController.payload.createToken(query.data)
+                    app.io.emit('new_user_connected', {...query.data.dataValues, isActive: true})
                     return res.status(200).json({ok: true, data: query.data, token: token});
                 }catch(error){
                     return res.status(400).json({ok: false, data: error});

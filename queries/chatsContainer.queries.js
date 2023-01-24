@@ -1,9 +1,9 @@
-import {ExperienceModel} from '../models/experience.model.js';
+import { ChatsContainerModel } from '../models/ChatsContainer.model.js'
 
-class ExperienceQueries {
-    async store(experience){
+class ChatsContainerQueries {
+    async store(profile){
         try {
-            const query = await ExperienceModel.create(experience);
+            const query = await ChatsContainerModel.create(profile);
             if(query){
                 return {ok: true, data: query}
             }
@@ -15,7 +15,7 @@ class ExperienceQueries {
 
     async find(condition = {}){
         try {
-            const query = await ExperienceModel.findAll({where: condition});
+            const query = await ChatsContainerModel.findAll({where: condition});
             if(query){
                 return {ok: true, data: query}
             }
@@ -25,9 +25,9 @@ class ExperienceQueries {
         }
     }
 
-    async findOne(condition){
+    async findOne(condition = {}){
         try {
-            const query = await ExperienceModel.findOne({where: {id: condition.id}});
+            const query = await ChatsContainerModel.findOne({where: {id: condition.id}});
             if(query){
                 return {ok: true, data: query}
             }
@@ -37,11 +37,9 @@ class ExperienceQueries {
         }
     }
 
-    async update(condition = {}){
-
-        console.log("Desde update => ", condition)
+    async update(condition = {}, data = {}){
         try {
-            const query = await ExperienceModel.update(condition, {where: {id: condition.id}});
+            const query = await ChatsContainerModel.update(condition, {where: {id: condition.id}});
             if(query){
                 return {ok: true, data: query}
             }
@@ -51,10 +49,9 @@ class ExperienceQueries {
         }
     }
 
-    async delete(condition){
-        console.log("Desde delete => ", condition)
+    async delete(condition = {}){
         try {
-            const query = await ExperienceModel.destroy({where: {id: condition.id}});
+            const query = await ChatsContainerModel.destroy({where: {id: condition.id}});
             if(query){
                 return {ok: true, data: query}
             }
@@ -65,4 +62,4 @@ class ExperienceQueries {
     }
 }
 
-export const experienceQueries = new ExperienceQueries();
+export const chatsContainerQueries = new ChatsContainerQueries();

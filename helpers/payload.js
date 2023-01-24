@@ -12,7 +12,7 @@ export class Payload {
         }
         
         const user_id = data.id;
-        const user_name = data.username;
+        const user_name = data.name;
         const role = 1;
 
         return jwt.sign({
