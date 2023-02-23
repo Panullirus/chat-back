@@ -1,4 +1,5 @@
-import app from "./config/config.js";
+// import app from "./config/config.js";
+const app = require("./config/config.js").default;
 
 const port = process.env.APP_PORT || 8081;
 
