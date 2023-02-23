@@ -14,12 +14,8 @@ class MessageContentQueries {
     }
 
     async find(condition = {}) {
-        console.log("Conversacionid => ", condition)
         try {
             const query = await MessageContent.findAll({ where: { conversaciones_id: condition.conversaciones_id } });
-
-            console.log("error por aca => ", query)
-
             if (query) {
                 return { ok: true, data: query }
             }

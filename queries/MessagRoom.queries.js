@@ -29,17 +29,23 @@ class MessageRoomQueries {
 
     async findOne(condition = {}) {
 
-        console.log("condicion => ", condition)
+        console.log("ids => ", condition)
+
         try {
             const query = await MessageRoom.findOne({
                 where: {
                     [Op.or]: [
-                        { id_usuario_1: condition.id_usuario_2, id_usuario_2: condition.id_usuario_1 },
-                        { id_usuario_1: condition.id_usuario_1, id_usuario_2: condition.id_usuario_2 }
+                        { id_usuario_1: condition.id_usuario_1, id_usuario_2: condition.id_usuario_2 },
+                        { id_usuario_1: condition.id_usuario_2, id_usuario_2: condition.id_usuario_1 }
                     ]
                 },
             })
-            return {ok: true, data: query}
+            
+            if(query){
+                return { ok: true, data: query } 
+            }else{
+                return { ok: false, data: null }
+            }
 
         } catch (e) {
             console.log('error al ejecutar query', e);

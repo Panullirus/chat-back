@@ -9,7 +9,7 @@ UserModel.init({
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
-    },
+    },  
     nombre: {
         type: DataTypes.STRING,
         allowNull: false
@@ -18,13 +18,17 @@ UserModel.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    uidGoogle: {
+        type: DataTypes.STRING,
+        allowNull: true  
+    },
     clave: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     last_connection:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }
 }, {
     sequelize: DatabaseConfig,

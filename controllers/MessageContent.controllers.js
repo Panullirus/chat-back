@@ -34,7 +34,6 @@ class MessageContentControllers {
 
     async find(req, res) {
         const body = req.body
-        console.log("ChatRoom => ", body)
         const query = await messageContentQueries.find(body);
         if (query.ok) {
             return res.status(200).json({ ok: true, message: query.data });
@@ -46,7 +45,6 @@ class MessageContentControllers {
     async findOne(req, res) {
         const body = req.body;
 
-        console.log(body)
         const query = await messageContentQueries.findOne(body);
         if (query) {
             return res.status(200).json({ ok: true, message: query.data });

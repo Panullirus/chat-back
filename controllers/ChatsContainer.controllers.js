@@ -14,7 +14,6 @@ class ChatsContainerControllers {
 
     async processData(request, response){
         const body = request.body;
-        console.log('data from', body)
         return response.status(200).json({ok: true, message: 'datos recividos'});
     }
 

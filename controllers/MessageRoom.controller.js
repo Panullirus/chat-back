@@ -42,8 +42,10 @@ class MessageRoomControllers {
     async findOne(req, res){
         const body = req.body;
 
-        console.log(body)
         const query = await messageRoomQueries.findOne(body);
+
+        console.log("check room => ", query)
+
         if(query){
             return res.status(200).json({ok: true, message: query.data});
         }else {

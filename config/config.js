@@ -45,7 +45,6 @@ class App {
 
     async initDatabase(){
         const conection = await this.db.conection();
-        console.log(conection.message);
     }
 
     async initBotListening(bot){
@@ -66,20 +65,38 @@ class App {
     async initSocket(){
         this.io.on('connection', (socket) => {
 
-            console.log("Nuevo usuario conectado", socket.id)
+            // socket.on('message_data', (data) => {
+            //     this.io.emit('message_data', data);
+            //     console.log(data)
+            // })
 
-            socket.on('message_data', (data) => {
-                this.io.emit('message_data', data);
-                console.log(data)
-            })
+            // socket.on('new_user_connected', data => {
+            //     this.io.emit('Nuevo usuario conectado => ', data)
+            // })
 
-            socket.on('new_user_connected', (data) => {
-                this.io.emit('Nuevo usuario conectado', data)
-            })
+            // socket.on('disconnect', (data) => {
+            //     console.log("usuario desconectado => ", data)
+            // })
+        })
 
-            socket.on('disconnect', () => {
-                console.log("Usuario desconectado")
-            })
+        this.io.on('user_status', () => {
+            
+        })
+
+        this.io.on('message_data', data => {
+            this.io.emit("message_data", data)
+        })
+
+        this.io.on('update_profile', data => {
+            this.io.emit("update_profile", data)
+        })
+        
+        this.io.on("new_user_connected", (socket) => {
+            console.log(socket)
+        })
+
+        this.io.on("disconnect", data => {
+            console.log("Usuario desconectado => ", data)
         })
 
         this.io.listen(3001);
