@@ -1,5 +1,5 @@
 import { request, response } from 'express';
-import { messageContentQueries } from '../queries/Message.queries.js'
+import { messageContentQueries } from '../queries/message.queries.js'
 import { Payload } from '../helpers/payload.js';
 import app from '../config/config.js'
 
