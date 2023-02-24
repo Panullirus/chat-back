@@ -2,7 +2,7 @@ import app from "./config/config.js";
 
 const port = process.env.APP_PORT || 8081;
 
-app.http.listen(port, "104.219.42.26",() => { console.log(`Server running on port ${port}`) });
+app.http.listen(port, () => { console.log(`Server running on port ${port}`) });
 //App.http.listen(port, () => console.log(`API escuchando en puerto: ${port}`))
 // const express = require('express');
 // const app = express();
